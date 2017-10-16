@@ -9,7 +9,6 @@ class Row extends Component {
   render() {
     const cells = [];
     for (let i = 0; i < 6; i++) {
-      const category = this.props.categories[i][0].category;
       const isAnswered = this.props.categories[i].find(q => {return q.value === this.props.value }).isAnswered;
       cells.push(
         <QuestionCell key={i}

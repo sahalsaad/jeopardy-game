@@ -13,8 +13,6 @@ class FinalJeopardy extends Component {
       totalWagers: 0
     };
 
-    this.setFinalAnswer = this.setFinalAnswer.bind(this);
-
     ipcRenderer.on('update-final-score', this.setFinalAnswer);
   }
 
@@ -22,7 +20,7 @@ class FinalJeopardy extends Component {
     ipcRenderer.removeAllListeners(['update-final-score']);
   }
 
-  setFinalAnswer(event, args) {
+  setFinalAnswer = (event, args) => {
     this.props.updateFinalScore({...args});
     ipcRenderer.send("update-scoreboard", this.props.players);
   }

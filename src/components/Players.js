@@ -7,10 +7,9 @@ import { addPlayer } from '../actions/actions';
 class Players extends Component {
   constructor(props) {
     super(props);
-    this.handleInput = this.handleInput.bind(this);
   }
 
-  handleInput(event) {
+  handleInput = (event) => {
     if (event.keyCode === 13) {
       /* enter key press */
       this.props.addPlayer(event.target.value);

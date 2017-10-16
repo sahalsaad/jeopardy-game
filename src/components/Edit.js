@@ -44,12 +44,7 @@ class Edit extends Component {
         },
       },
     };
-    this.handleSave = this.handleSave.bind(this);
-    this.updateCategory = this.updateCategory.bind(this);
-    this.handleTabSwitch = this.handleTabSwitch.bind(this);
-    this.editQuestion = this.editQuestion.bind(this);
-    this.editExisting = this.editExisting.bind(this);
-  
+
     ipcRenderer.on('open-file-reply', (event, data) => {
       try {
         const gameData = JSON.parse(data.fileContents);
@@ -83,16 +78,16 @@ class Edit extends Component {
     ipcRenderer.removeAllListeners(['open-file-reply']);
   }
 
-  handleSave() {
+  handleSave = () => {
     console.log(JSON.stringify(this.state.game));
     ipcRenderer.send('save-file-dialog', {data: JSON.stringify(this.state.game)});
   }
 
-  editExisting() {
+  editExisting = () => {
     ipcRenderer.send('open-file-dialog');
   }
 
-  updateCategory(index, value) {
+  updateCategory = (index, value) => {
     let questions = this.state.game[this.state.currentTab].categories[index].map(question => {
       return {...question, category: value};
     });
@@ -113,21 +108,17 @@ class Edit extends Component {
     });
   }
 
-  handleTabSwitch(tab) {
-    if (tab != 'finalJeopardy' && this.state.currentTab != 'finalJeopardy') {
+  handleTabSwitch = (currentTab) => {
+    if (currentTab != 'finalJeopardy' && this.state.currentTab != 'finalJeopardy') {
       for (let i = 0; i < 6; i++) {
-        let category = this.state.game[tab].categories[i][0].category;
-        if (category) {
-          this.refs['categoryInput' + i].value = category;
-        } else {
-          this.refs['categoryInput' + i].value = '';
-        }
+        let category = this.state.game[currentTab].categories[i][0].category;
+        this.refs[`categoryInput${i}`].value = category ? category : '';
       }
     }
-    this.setState({currentTab: tab});
+    this.setState({currentTab});
   }
 
-  editQuestion(categoryIndex, index) {
+  editQuestion = (categoryIndex, index) => {
     this.setState({
       editingQuestion: {categoryId: categoryIndex, questionId: index}
     });
@@ -155,12 +146,13 @@ class Edit extends Component {
   }
 
   render() {
-    if (this.state.editingQuestion && this.state.currentTab != 'finalJeopardy') { 
-      var questionObj = this.state.game[this.state.currentTab].categories[this.state.editingQuestion.categoryId][this.state.editingQuestion.questionId];
+    let questionObj, categories;
+    if (this.state.editingQuestion && this.state.currentTab != 'finalJeopardy') {
+      questionObj = this.state.game[this.state.currentTab].categories[this.state.editingQuestion.categoryId][this.state.editingQuestion.questionId];
     }
 
     if (this.state.currentTab != 'finalJeopardy') {
-      var categories = Object.keys(this.state.game[this.state.currentTab].categories).map((categoryId, i) => {
+      categories = Object.keys(this.state.game[this.state.currentTab].categories).map((categoryId, i) => {
         let categoryName = this.state.game[this.state.currentTab].categories[categoryId].find(cat => {
           return cat.category != '';
         });
@@ -180,8 +172,8 @@ class Edit extends Component {
           </div>
         );
       });
-    } else { 
-      var categories = (
+    } else {
+      categories = (
         <div>
           <div>
             <input defaultValue={this.state.game.finalJeopardy.category}

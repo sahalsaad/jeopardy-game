@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { ipcRenderer } from  'electron';
 import { hashHistory } from 'react-router';
 
-import Setup from './Setup';
-import Row from './Row';
 import Question from './Question';
 import Categories from '../containers/Categories';
 import RowContainer from '../containers/RowContainer';
@@ -41,8 +39,6 @@ class App extends Component {
     this.state = {
       showQuestion: false
     };
-    this.openQuestion = this.openQuestion.bind(this);
-    /*this.closeQuestion = this.closeQuestion.bind(this);*/
 
     ipcRenderer.on('update-score', (event, data) => {
       this.props.updateScore(data.value, data.player, this.state.category, this.state.showQuestion);
@@ -69,7 +65,7 @@ class App extends Component {
 
   }
 
-  openQuestion(category, value) {
+  openQuestion = (category, value) => {
 
     const question = this.props.game[this.props.currentVersion].categories[category].find(question => question.value === value);
     this.setState({ showQuestion: question, category });

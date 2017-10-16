@@ -14,9 +14,6 @@ class Setup extends Component {
       gameName: undefined,
       creatingGame: false,
     };
-    this.onStartGame = this.onStartGame.bind(this);
-    this.createGame = this.createGame.bind(this);
-    this.loadFileListener = this.loadFileListener.bind(this);
 
     ipcRenderer.on('open-file-reply', this.loadFileListener);
 
@@ -26,7 +23,7 @@ class Setup extends Component {
     ipcRenderer.removeAllListeners(['open-file-reply']);
   }
 
-  onStartGame() {
+  onStartGame = () => {
     ipcRenderer.send('launch-admin-pannel', {
       players: this.props.players.map(player => {return player.name})
     });
@@ -41,12 +38,12 @@ class Setup extends Component {
     ipcRenderer.send('open-file-dialog');
   }
 
-  createGame() {
+  createGame = () => {
     this.setState({creatingGame: true });
     hashHistory.push('/edit');
   }
 
-  loadFileListener(event, data) {
+  loadFileListener = (event, data) => {
     if (data.fileContents){
       try {
         this.setState({
